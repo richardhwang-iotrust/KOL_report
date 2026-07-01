@@ -20,7 +20,7 @@ from bs4 import BeautifulSoup
 KST = timezone(timedelta(hours=9))
 SLACK_CHANNEL = "C0B5H4AAN02"
 CONCURRENCY = 25          # 동시 요청 수
-REQUEST_TIMEOUT = 20      # 채널당 타임아웃(초)
+REQUEST_TIMEOUT = 30      # 채널당 타임아웃(초)
 MAX_POST_TEXT = 600       # 포스트당 최대 문자 수
 MAX_ANALYSIS_CHARS = 95000  # Claude 입력 최대 문자
 
