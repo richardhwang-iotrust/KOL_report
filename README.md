@@ -19,19 +19,36 @@
    - 👀 **특이 포스팅**
 3. **발행** — 한국어/영어 두 가지 보고서를 Slack Webhook으로 발행합니다.
 
-## 실행 스케줄
+## 실행 방식 (두 가지)
 
-- GitHub Actions로 **매일 오전 4시(KST) = UTC 19:00**에 자동 실행됩니다. (`.github/workflows/daily_brief.yml`)
+분석 단계를 누가 수행하느냐에 따라 **필요한 결제가 다릅니다.**
+
+| 방식 | 분석 주체 | 필요 결제 | 문서 |
+|------|-----------|-----------|------|
+| **A. Claude Code 루틴** | 루틴의 Claude 에이전트 | claude.ai **구독 사용량만** | [ROUTINE.md](ROUTINE.md) |
+| **B. GitHub Actions + API** | 스크립트가 API 직접 호출 | Anthropic **API 종량제 크레딧** | 아래 참고 |
+
+> 💡 Anthropic API 크레딧 없이 이미 결제 중인 구독만으로 돌리려면 **방식 A(루틴)** 를 쓰세요.
+> 설정 방법은 [ROUTINE.md](ROUTINE.md)에 정리되어 있습니다.
+
+### 방식 B: GitHub Actions 스케줄
+
+- `.github/workflows/daily_brief.yml`이 **매일 오전 4시(KST) = UTC 19:00**에 `telegram_brief.py`를 실행합니다.
 - `workflow_dispatch`로 수동 실행도 가능합니다.
+- 이 방식은 `ANTHROPIC_API_KEY`(종량제)와 `SLACK_WEBHOOK_URL`을 리포 Secrets에 등록해야 합니다.
 
 ## 프로젝트 구조
 
 ```
 .
 ├── scripts/
-│   └── telegram_brief.py      # 수집·분석·발행 메인 스크립트
+│   ├── kol_common.py          # 공용: 채널 목록·수집 로직·리포트 생성
+│   ├── fetch_posts.py         # [루틴 1단계] 텔레그램 수집 → posts.json (API 키 불필요)
+│   ├── publish.py             # [루틴 3단계] analysis.json → Slack 발행 (API 키 불필요)
+│   └── telegram_brief.py      # [방식 B] 수집·분석(API)·발행 올인원 스크립트
 ├── .github/workflows/
-│   └── daily_brief.yml        # 매일 자동 실행 워크플로우
+│   └── daily_brief.yml        # 방식 B 자동 실행 워크플로우
+├── ROUTINE.md                 # 방식 A(Claude 루틴) 설정 가이드
 ├── requirements.txt           # Python 의존성
 └── README.md
 ```
