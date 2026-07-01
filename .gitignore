@@ -17,3 +17,7 @@ env/
 
 # Logs / output
 *.log
+
+# Routine runtime artifacts (generated on each run)
+posts.json
+analysis.json
