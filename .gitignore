@@ -21,3 +21,7 @@ env/
 # Routine runtime artifacts (generated on each run)
 posts.json
 analysis.json
+
+# Quarterly update report (generated each run)
+channel_update_report.md
+channels_sheet.csv
